@@ -25,7 +25,7 @@ Function Rocket.p_init()
 
     FreeBrush(rocketorigbr)
 
-    Rocket.explode_brush = LoadAnim(Nil, "images/explosion.png", {Width=96, Height=96, Frames=12, Transparency=#BLACK})
+    Rocket.explode_brush = LoadAnim(Nil, DATADIR .. "images/explosion.png", {Width=96, Height=96, Frames=12, Transparency=#BLACK})
 EndFunction
 
 

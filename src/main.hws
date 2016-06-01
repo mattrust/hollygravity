@@ -1,6 +1,14 @@
+If GetProgramInfo() = #PRGTYPE_SCRIPT
+    DATADIR = "/"
+Else
+    DATADIR = ""
+EndIf
+
+
 @INCLUDE "rocket.hws"
 @INCLUDE "levels.hws"
 @INCLUDE "camera.hws"
+
 
 Function p_game_loop()
     BeginDoubleBuffer

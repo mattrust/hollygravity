@@ -1,0 +1,8 @@
+delete HollyGravity.68k HollyGravity.aos4 HollyGravity.aros-i386 HollyGravity.mos HollyGravity.wos HollyGravity.linux
+
+;hollywood:system/hollywood src/main.hws -compile HollyGravity.68k       -exetype CLASSIC
+;hollywood:system/hollywood src/main.hws -compile HollyGravity.aos4      -exetype AMIGAOS4
+;hollywood:system/hollywood src/main.hws -compile HollyGravity.wos       -exetype WARPOS
+;hollywood:system/hollywood src/main.hws -compile HollyGravity.mos       -exetype MORPHOS
+hollywood:system/hollywood src/main.hws -compile HollyGravity.aros-i386 -exetype AROS
+hollywood:system/hollywood src/main.hws -compile HollyGravity.linux     -exetype LINUX
