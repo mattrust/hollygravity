@@ -1,0 +1,57 @@
+Rocket = {}
+
+Function Rocket.p_init()
+    Rocket.posx = 600
+    Rocket.posy = 250
+    Rocket.speedx = 0
+    Rocket.speedy = 0
+    Rocket.dir = Rad(270)
+    Rocket.frame = 24
+    Rocket.acc = 0
+    Rocket.grav = 0.05
+
+    Local rocketorigbr = CreateBrush(Nil, 19, 19, #BLACK, {AlphaChannel=True, Clear=True})
+    SelectBrush(rocketorigbr, #SELMODE_COMBO)
+    SetFillStyle(#FILLCOLOR)
+    ;SetFormStyle(#ANTIALIAS)
+    Polygon(0, 0, {18, 9, 9, 14, 0, 14, 0, 4, 9, 4}, 5, #RED)
+    EndSelect
+
+    Rocket.rocket_brush = {}
+    For Local i = 0 To 31
+        Rocket.rocket_brush[i] = CopyBrush(rocketorigbr, Nil)
+        RotateBrush(Rocket.rocket_brush[i], -i * 360 / 32)
+    Next
+
+    FreeBrush(rocketorigbr)
+
+    Rocket.explode_brush = LoadAnim(Nil, "images/explosion.png", {Width=96, Height=96, Frames=12, Transparency=#BLACK})
+EndFunction
+
+
+Function Rocket.p_handle_events()
+    Rocket.acc = 0
+    If IsKeyDown("Up")
+        Rocket.acc = 0.1
+    EndIf
+    If IsKeyDown("Right")
+        Rocket.dir = Rocket.dir + 0.1
+    ElseIf IsKeyDown("Left")
+        Rocket.dir = Rocket.dir - 0.1
+    EndIf
+EndFunction
+
+
+Function Rocket.p_update()
+    Rocket.dir = Wrap(Rocket.dir, 0, 2 * #PI)
+    Rocket.frame = Int(Rocket.dir / (2 * #PI / 32.0))
+    Rocket.speedx = Rocket.speedx + Rocket.acc * Cos(Rocket.dir)
+    Rocket.speedy = Rocket.speedy + Rocket.acc * Sin(Rocket.dir) + Rocket.grav
+    Rocket.posx = Rocket.posx + Rocket.speedx
+    Rocket.posy = Rocket.posy + Rocket.speedy
+EndFunction
+
+
+Function Rocket.p_draw()
+    DisplayBrush(Rocket.rocket_brush[Rocket.frame], Rocket.posx - Camera.offsetx, Rocket.posy - Camera.offsety, {AnchorX = 0.5, AnchorY = 0.5})
+EndFunction

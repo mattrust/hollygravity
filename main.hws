@@ -1,0 +1,43 @@
+@INCLUDE "rocket.hws"
+@INCLUDE "levels.hws"
+@INCLUDE "camera.hws"
+
+Function p_game_loop()
+    BeginDoubleBuffer
+    Repeat
+        If IsKeyDown("Esc") Then Return(FALSE)
+
+        Rocket.p_handle_events()
+        Rocket.p_update()
+        Camera.p_update()
+        Cls
+        Level.p_draw()
+        Rocket.p_draw()
+
+        Local rbrid = Rocket.rocket_brush[Rocket.frame]
+        Local rbrw = GetAttribute(#BRUSH, rbrid, #ATTRWIDTH)
+        Local rbrh = GetAttribute(#BRUSH, rbrid, #ATTRHEIGHT)
+        If Collision(#BRUSH, Level.brush, 0, 0, rbrid, Rocket.posx - rbrw / 2, Rocket.posy - rbrh / 2)
+            Return(FALSE)
+        EndIf
+
+        Flip
+        WaitTimer(1, 40)
+    Forever
+    EndDoubleBuffer
+EndFunction
+
+
+Level.p_init()
+Rocket.p_init()
+Camera.p_init(Level.width, Level.height, Rocket.posx, Rocket.posy)
+
+StartTimer(1)
+
+If p_game_loop()
+
+Else
+    EndDoubleBuffer
+    PlayAnim(Rocket.explode_brush, Rocket.posx - Camera.offsetx - 48, Rocket.posy - Camera.offsety - 48, {Speed=7})
+    ClearScreen(#RANDOMEFFECT)
+EndIf

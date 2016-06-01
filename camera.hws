@@ -1,0 +1,22 @@
+Camera = {}
+
+
+Function Camera.p_init(width, height, posx, posy)
+    Camera.displaywidth = GetAttribute(#DISPLAY, 1, #ATTRWIDTH)
+    Camera.displayheight = GetAttribute(#DISPLAY, 1, #ATTRHEIGHT)
+    Camera.width = width
+    Camera.height = height
+    Camera.posx = posx
+    Camera.posy = posy
+    Camera.offsetx = Camera.posx - Camera.displaywidth / 2
+    Camera.offsety = Camera.posy - Camera.displayheight / 2
+    Camera.offsetx = Limit(Camera.offsetx, 0, Camera.width - Camera.displaywidth)
+    Camera.offsety = Limit(Camera.offsety, 0, Camera.height - Camera.displayheight)
+    DebugPrint(Camera.width, Camera.height)
+    DebugPrint(Camera.displaywidth, Camera.displayheight)
+    DebugPrint(Camera.offsetx, Camera.offsety)
+EndFunction
+
+
+Function Camera.p_update()
+EndFunction

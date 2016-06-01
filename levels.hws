@@ -1,0 +1,12 @@
+Level = {}
+
+Function Level.p_init()
+    Level.filename = "images/test.png"
+    Level.brush = LoadBrush(Nil, Level.filename, {LoadAlpha=True})
+    Level.width = GetAttribute(#BRUSH, Level.brush, #ATTRWIDTH)
+    Level.height = GetAttribute(#BRUSH, Level.brush, #ATTRHEIGHT)
+EndFunction
+
+Function Level.p_Draw()
+    DisplayBrushPart(Level.brush, Camera.offsetx, Camera.offsety, 0, 0, Camera.displaywidth, Camera.displayheight)
+EndFunction
