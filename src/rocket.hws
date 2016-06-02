@@ -2,13 +2,14 @@ Rocket = {}
 
 Function Rocket.p_init()
     Rocket.posx = 600
-    Rocket.posy = 250
+    Rocket.posy = 400
     Rocket.speedx = 0
     Rocket.speedy = 0
     Rocket.dir = Rad(270)
     Rocket.frame = 24
     Rocket.acc = 0
     Rocket.grav = 0.05
+    Rocket.fuel = 100
 
     Local rocketorigbr = CreateBrush(Nil, 19, 19, #BLACK, {AlphaChannel=True, Clear=True})
     SelectBrush(rocketorigbr, #SELMODE_COMBO)
@@ -31,13 +32,16 @@ EndFunction
 
 Function Rocket.p_handle_events()
     Rocket.acc = 0
-    If IsKeyDown("Up")
-        Rocket.acc = 0.1
-    EndIf
-    If IsKeyDown("Right")
-        Rocket.dir = Rocket.dir + 0.1
-    ElseIf IsKeyDown("Left")
-        Rocket.dir = Rocket.dir - 0.1
+    If Rocket.fuel > 0 ; no fuel no fun
+        If IsKeyDown("Up")
+            Rocket.acc = 0.1
+            Rocket.fuel = Rocket.fuel - 0.1
+        EndIf
+        If IsKeyDown("Right")
+            Rocket.dir = Rocket.dir + 0.1
+        ElseIf IsKeyDown("Left")
+            Rocket.dir = Rocket.dir - 0.1
+        EndIf
     EndIf
 EndFunction
 

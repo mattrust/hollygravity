@@ -17,10 +17,16 @@ Function p_game_loop()
 
         Rocket.p_handle_events()
         Rocket.p_update()
-        Camera.p_update()
+        Camera.p_update(Rocket.posx, Rocket.posy)
         Cls
         Level.p_draw()
         Rocket.p_draw()
+
+        TextOut(20, 460, "Fuel")
+        If Rocket.fuel > 1
+            SetFillStyle(#FILLCOLOR)
+            Box(60, 460, Rocket.fuel, 10, #RED)
+        EndIf
 
         Local rbrid = Rocket.rocket_brush[Rocket.frame]
         Local rbrw = GetAttribute(#BRUSH, rbrid, #ATTRWIDTH)
@@ -35,6 +41,8 @@ Function p_game_loop()
     EndDoubleBuffer
 EndFunction
 
+
+HidePointer
 
 Level.p_init()
 Rocket.p_init()

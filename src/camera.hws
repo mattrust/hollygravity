@@ -3,20 +3,39 @@ Camera = {}
 
 Function Camera.p_init(width, height, posx, posy)
     Camera.displaywidth = GetAttribute(#DISPLAY, 1, #ATTRWIDTH)
-    Camera.displayheight = GetAttribute(#DISPLAY, 1, #ATTRHEIGHT)
+    Camera.displayheight = GetAttribute(#DISPLAY, 1, #ATTRHEIGHT) - 30
     Camera.width = width
     Camera.height = height
-    Camera.posx = posx
-    Camera.posy = posy
-    Camera.offsetx = Camera.posx - Camera.displaywidth / 2
-    Camera.offsety = Camera.posy - Camera.displayheight / 2
+    Camera.offsetx = posx - Camera.displaywidth / 2
+    Camera.offsety = posy - Camera.displayheight / 2
+
+    ; ensure camera stays within playfield
     Camera.offsetx = Limit(Camera.offsetx, 0, Camera.width - Camera.displaywidth)
     Camera.offsety = Limit(Camera.offsety, 0, Camera.height - Camera.displayheight)
-    DebugPrint(Camera.width, Camera.height)
-    DebugPrint(Camera.displaywidth, Camera.displayheight)
-    DebugPrint(Camera.offsetx, Camera.offsety)
 EndFunction
 
 
-Function Camera.p_update()
+Function Camera.p_update(posx, posy)
+    ; ensure that rocket stays within camera view
+    Camera.offsetx = Limit(Camera.offsetx, posx - Camera.displaywidth + 20 , posx - 20)
+    Camera.offsety = Limit(Camera.offsety, posy - Camera.displayheight + 20 , posy - 20)
+
+    ; move camera slowly towards rocket
+    Local diffx = posx - Camera.offsetx - Camera.displaywidth / 2
+    Local diffy = posy - Camera.offsety - Camera.displayheight / 2
+
+    If diffx * diffx + diffy * diffy > 2500
+        Local angle = 0
+        If Abs(diffx) < 0.001
+            If diffy > 0 Then angle = #PI / 2 Else angle = - #PI / 2
+        Else
+            angle = Atan2(diffy, diffx)
+        EndIf
+        Camera.offsetx = Camera.offsetx + Cos(angle)
+        Camera.offsety = Camera.offsety + Sin(angle)
+    EndIf
+
+    ; ensure camera stays within playfield
+    Camera.offsetx = Limit(Camera.offsetx, 0, Camera.width - Camera.displaywidth)
+    Camera.offsety = Limit(Camera.offsety, 0, Camera.height - Camera.displayheight)
 EndFunction
