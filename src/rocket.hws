@@ -10,6 +10,7 @@ Function Rocket.p_init()
     Rocket.acc = 0
     Rocket.grav = 0.05
     Rocket.fuel = 100
+    Rocket.landed = True
 
     Local rocketorigbr = CreateBrush(Nil, 19, 19, #BLACK, {AlphaChannel=True, Clear=True})
     SelectBrush(rocketorigbr, #SELMODE_COMBO)
@@ -26,7 +27,8 @@ Function Rocket.p_init()
 
     FreeBrush(rocketorigbr)
 
-    Rocket.explode_brush = LoadAnim(Nil, DATADIR .. "images/explosion.png", {Width=96, Height=96, Frames=12, Transparency=#BLACK})
+    Rocket.explode_brush = LoadAnim(Nil, DATADIR .. "images/explosion.png",
+        {Width=96, Height=96, Frames=12, Transparency=#BLACK})
 EndFunction
 
 
@@ -36,6 +38,7 @@ Function Rocket.p_handle_events()
         If IsKeyDown("Up")
             Rocket.acc = 0.1
             Rocket.fuel = Rocket.fuel - 0.1
+            Rocket.landed = False
         EndIf
         If IsKeyDown("Right")
             Rocket.dir = Rocket.dir + 0.1
@@ -50,12 +53,16 @@ Function Rocket.p_update()
     Rocket.dir = Wrap(Rocket.dir, 0, 2 * #PI)
     Rocket.frame = Int(Rocket.dir / (2 * #PI / 32.0))
     Rocket.speedx = Rocket.speedx + Rocket.acc * Cos(Rocket.dir)
-    Rocket.speedy = Rocket.speedy + Rocket.acc * Sin(Rocket.dir) + Rocket.grav
+    Rocket.speedy = Rocket.speedy + Rocket.acc * Sin(Rocket.dir)
+    If Not Rocket.landed
+        Rocket.speedy = Rocket.speedy + Rocket.grav
+    EndIf
     Rocket.posx = Rocket.posx + Rocket.speedx
     Rocket.posy = Rocket.posy + Rocket.speedy
 EndFunction
 
 
 Function Rocket.p_draw()
-    DisplayBrush(Rocket.rocket_brush[Rocket.frame], Rocket.posx - Camera.offsetx, Rocket.posy - Camera.offsety, {AnchorX = 0.5, AnchorY = 0.5})
+    DisplayBrush(Rocket.rocket_brush[Rocket.frame], Rocket.posx - Camera.offsetx, Rocket.posy - Camera.offsety,
+        {AnchorX = 0.5, AnchorY = 0.5})
 EndFunction

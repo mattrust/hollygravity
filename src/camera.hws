@@ -25,12 +25,7 @@ Function Camera.p_update(posx, posy)
     Local diffy = posy - Camera.offsety - Camera.displayheight / 2
 
     If diffx * diffx + diffy * diffy > 2500
-        Local angle = 0
-        If Abs(diffx) < 0.001
-            If diffy > 0 Then angle = #PI / 2 Else angle = - #PI / 2
-        Else
-            angle = Atan2(diffy, diffx)
-        EndIf
+        Local angle = Atan2(diffy, diffx)
         Camera.offsetx = Camera.offsetx + Cos(angle)
         Camera.offsety = Camera.offsety + Sin(angle)
     EndIf

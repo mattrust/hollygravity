@@ -16,23 +16,42 @@ Function p_game_loop()
         If IsKeyDown("Esc") Then Return(FALSE)
 
         Rocket.p_handle_events()
-        Rocket.p_update()
-        Camera.p_update(Rocket.posx, Rocket.posy)
-        Cls
-        Level.p_draw()
-        Rocket.p_draw()
 
-        TextOut(20, 460, "Fuel")
-        If Rocket.fuel > 1
-            SetFillStyle(#FILLCOLOR)
-            Box(60, 460, Rocket.fuel, 10, #RED)
+        If Rocket.posx < 0 Or Rocket.posx > Level.width Or 
+                Rocket.posy < 0 Or Rocket.posy > Level.height
+            ; we've left the universe
+            Return(False)
         EndIf
+
+        DebugPrint(Rocket.landed)
+        If Abs(Rocket.speedx) < 1 And Abs(Rocket.speedy) < 1 And Rocket.dir > Rad(260) And Rocket.dir < Rad(280)
+            If Collision(#BRUSH_VS_BOX, Level.brush, 0, 0, Rocket.posx - 5, Rocket.posy + 10, 10, 3)
+                Rocket.landed = True
+                Rocket.speedx = 0
+                Rocket.speedy = 0
+                Rocket.dir = Rad(270)
+            EndIf
+        EndIf
+        DebugPrint(Rocket.landed)
 
         Local rbrid = Rocket.rocket_brush[Rocket.frame]
         Local rbrw = GetAttribute(#BRUSH, rbrid, #ATTRWIDTH)
         Local rbrh = GetAttribute(#BRUSH, rbrid, #ATTRHEIGHT)
         If Collision(#BRUSH, Level.brush, 0, 0, rbrid, Rocket.posx - rbrw / 2, Rocket.posy - rbrh / 2)
             Return(FALSE)
+        EndIf
+
+        Rocket.p_update()
+        Camera.p_update(Rocket.posx, Rocket.posy)
+
+        Cls
+        Level.p_draw()
+        Rocket.p_draw()
+        SetFillStyle(#FILLCOLOR)
+        Box(0, 450, 800, 30, #GRAY)
+        TextOut(20, 460, "Fuel")
+        If Rocket.fuel > 1
+            Box(60, 460, Rocket.fuel, 10, #RED)
         EndIf
 
         Flip
