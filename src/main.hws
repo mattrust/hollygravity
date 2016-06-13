@@ -8,14 +8,15 @@ EndIf
 @INCLUDE "rocket.hws"
 @INCLUDE "levels.hws"
 @INCLUDE "camera.hws"
-
+@INCLUDE "panel.hws"
 
 Function p_game_loop()
     BeginDoubleBuffer
     Repeat
         If IsKeyDown("Esc") Then Return(FALSE)
+        Local canland = False
 
-        Rocket.p_handle_events()
+        Rocket.p_handle_events
 
         If Rocket.posx < 0 Or Rocket.posx > Level.width Or 
                 Rocket.posy < 0 Or Rocket.posy > Level.height
@@ -23,8 +24,8 @@ Function p_game_loop()
             Return(False)
         EndIf
 
-        DebugPrint(Rocket.landed)
         If Abs(Rocket.speedx) < 1 And Abs(Rocket.speedy) < 1 And Rocket.dir > Rad(260) And Rocket.dir < Rad(280)
+            canland = True
             If Collision(#BRUSH_VS_BOX, Level.brush, 0, 0, Rocket.posx - 5, Rocket.posy + 10, 10, 3)
                 Rocket.landed = True
                 Rocket.speedx = 0
@@ -32,7 +33,6 @@ Function p_game_loop()
                 Rocket.dir = Rad(270)
             EndIf
         EndIf
-        DebugPrint(Rocket.landed)
 
         Local rbrid = Rocket.rocket_brush[Rocket.frame]
         Local rbrw = GetAttribute(#BRUSH, rbrid, #ATTRWIDTH)
@@ -41,18 +41,14 @@ Function p_game_loop()
             Return(FALSE)
         EndIf
 
-        Rocket.p_update()
+        Rocket.p_update
+        Panel.p_update(Rocket.fuel, canland)
         Camera.p_update(Rocket.posx, Rocket.posy)
 
         Cls
-        Level.p_draw()
-        Rocket.p_draw()
-        SetFillStyle(#FILLCOLOR)
-        Box(0, 450, 800, 30, #GRAY)
-        TextOut(20, 460, "Fuel")
-        If Rocket.fuel > 1
-            Box(60, 460, Rocket.fuel, 10, #RED)
-        EndIf
+        Level.p_draw
+        Rocket.p_draw
+        Panel.p_draw
 
         Flip
         WaitTimer(1, 40)
@@ -63,8 +59,9 @@ EndFunction
 
 HidePointer
 
-Level.p_init()
-Rocket.p_init()
+Level.p_init
+Rocket.p_init
+Panel.p_init
 Camera.p_init(Level.width, Level.height, Rocket.posx, Rocket.posy)
 
 StartTimer(1)

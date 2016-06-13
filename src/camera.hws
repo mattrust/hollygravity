@@ -26,8 +26,8 @@ Function Camera.p_update(posx, posy)
 
     If diffx * diffx + diffy * diffy > 2500
         Local angle = Atan2(diffy, diffx)
-        Camera.offsetx = Camera.offsetx + Cos(angle)
-        Camera.offsety = Camera.offsety + Sin(angle)
+        Camera.offsetx = Camera.offsetx + Cos(angle) * 3
+        Camera.offsety = Camera.offsety + Sin(angle) * 3
     EndIf
 
     ; ensure camera stays within playfield
