@@ -20,6 +20,7 @@ EndIf
 @INCLUDE "camera.hws"
 @INCLUDE "panel.hws"
 @INCLUDE "parcels.hws"
+@INCLUDE "gas.hws"
 
 Function p_game_loop()
     BeginDoubleBuffer
@@ -65,6 +66,9 @@ Function p_game_loop()
                     Rocket.haveparcel = True
                 EndIf
             EndIf
+            If Rocket.fuel < 100 And Gas.p_check()
+                Rocket.p_refuel
+            EndIf
         EndIf
 
         Rocket.p_update
@@ -75,6 +79,7 @@ Function p_game_loop()
         Level.p_draw
         Rocket.p_draw
         Parcels.p_draw
+        Gas.p_draw
         Panel.p_draw
 
         Flip
@@ -86,6 +91,7 @@ EndFunction
 
 HidePointer
 
+Gas.p_init
 Parcels.p_init
 Level.p_init
 Rocket.p_init

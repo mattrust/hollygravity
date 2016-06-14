@@ -12,6 +12,7 @@ Function Level.p_init()
     Level.port_height = 20
     Parcels.p_add(650, 130)
     Parcels.p_add(150, 695)
+    Gas.p_add(180, 695)
 EndFunction
 
 

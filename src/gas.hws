@@ -1,0 +1,35 @@
+Gas = {}
+
+
+Function Gas.p_init()
+    Gas.list = {}
+    Gas.brush = CreateBrush(Nil, 10, 12, #PURPLE)
+EndFunction
+
+
+Function Gas.p_add(posx, posy)
+    Local newstation = {posx = posx, posy = posy}
+    InsertItem(Gas.list, newstation)
+EndFunction
+
+
+Function Gas.p_draw()
+    ForEach(Gas.list, 
+        Function(index, station)
+            DisplayBrush(Gas.brush, station.posx - Camera.offsetx, station.posy - Camera.offsety)
+        EndFunction)
+EndFunction
+
+
+Function Gas.p_check()
+    Local pos = ForEach(Gas.list,
+        Function(index, station)
+            If Collision(#BOX, Rocket.posx - 10, Rocket.posy - 10, 20, 20, station.posx, station.posy, 10, 12)
+                return(index) ; returning a value breaks ForEach
+            EndIf
+        EndFunction)
+    If GetType(pos) <> #NIL
+        Return(True)
+    EndIf
+    Return(False)
+EndFunction

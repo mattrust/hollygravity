@@ -67,3 +67,9 @@ Function Rocket.p_draw()
     DisplayBrush(Rocket.rocket_brush[Rocket.frame], Rocket.posx - Camera.offsetx, Rocket.posy - Camera.offsety,
         {AnchorX = 0.5, AnchorY = 0.5})
 EndFunction
+
+
+Function Rocket.p_refuel()
+    Rocket.fuel = Rocket.fuel + 0.4
+    If Rocket.fuel > 100 Then Rocket.fuel = 100
+EndFunction
