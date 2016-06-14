@@ -11,6 +11,7 @@ Function Rocket.p_init()
     Rocket.grav = 0.05
     Rocket.fuel = 100
     Rocket.landed = True
+    Rocket.haveparcel = False
 
     Local rocketorigbr = CreateBrush(Nil, 19, 19, #BLACK, {AlphaChannel=True, Clear=True})
     SelectBrush(rocketorigbr, #SELMODE_COMBO)

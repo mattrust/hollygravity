@@ -1,0 +1,36 @@
+Parcels = {}
+
+
+Function Parcels.p_init()
+    Parcels.list = {}
+    Parcels.brush = CreateBrush(Nil, 8, 8, #YELLOW)
+EndFunction
+
+
+Function Parcels.p_add(posx, posy)
+    Local newparcel = {posx = posx, posy = posy}
+    InsertItem(Parcels.list, newparcel)
+EndFunction
+
+
+Function Parcels.p_draw()
+    ForEach(Parcels.list, 
+        Function(index, parcel)
+            DisplayBrush(Parcels.brush, parcel.posx - Camera.offsetx, parcel.posy - Camera.offsety)
+        EndFunction)
+EndFunction
+
+
+Function Parcels.p_check()
+    Local pos = ForEach(Parcels.list,
+        Function(index, parcel)
+            If Collision(#BOX, Rocket.posx - 10, Rocket.posy - 10, 20, 20, parcel.posx, parcel.posy, 8, 8)
+                return(index) ; returning a value breaks ForEach
+            EndIf
+        EndFunction)
+    If GetType(pos) <> #NIL
+        RemoveItem(Parcels.list, pos)
+        Return(True)
+    EndIf
+    Return(False)
+EndFunction

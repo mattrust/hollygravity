@@ -1,12 +1,21 @@
 Level = {}
 
+
 Function Level.p_init()
     Level.filename = DATADIR .. "images/test.png"
     Level.brush = LoadBrush(Nil, Level.filename, {LoadAlpha=True})
     Level.width = GetAttribute(#BRUSH, Level.brush, #ATTRWIDTH)
     Level.height = GetAttribute(#BRUSH, Level.brush, #ATTRHEIGHT)
+    Level.port_posx = 10
+    Level.port_posy = 750
+    Level.port_width = 100
+    Level.port_height = 20
+    Parcels.p_add(650, 130)
+    Parcels.p_add(150, 695)
 EndFunction
+
 
 Function Level.p_Draw()
     DisplayBrushPart(Level.brush, Camera.offsetx, Camera.offsety, 0, 0, Camera.displaywidth, Camera.displayheight)
+    Box(Level.port_posx - Camera.offsetx, Level.port_posy - Camera.offsety, Level.port_width, Level.port_height, #BLUE)
 EndFunction
